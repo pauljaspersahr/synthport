@@ -50,9 +50,6 @@
 int main() {
   Sine sine;
 
-  printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n",
-         SAMPLE_RATE, FRAMES_PER_BUFFER);
-
   ScopedPaHandler paInit;
   if (paInit.result() != paNoError)
     goto error;
@@ -60,9 +57,12 @@ int main() {
   if (sine.open(Pa_GetDefaultOutputDevice())) {
     if (sine.start()) {
       ComputerKeyboard keyboard{};
-      while (true) {}
-      auto input = keyboard.getInput();
-      std::cout << static_cast<int>(input) << std::endl;
+      while (true) {
+        auto key = keyboard.getInput();
+        if (std::holds_alternative<InvalidKey>(key))
+          break;
+        sine.applyInput(key);
+      }
       sine.stop();
     }
 

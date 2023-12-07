@@ -19,7 +19,7 @@ class ComputerKeyboard final : public Keyboard {
   using UserInput = char;
 
  public:
-  Key getInput() const final {
+  Input getInput() const final {
     char ch;
 
 #ifdef _WIN32
@@ -37,19 +37,24 @@ class ComputerKeyboard final : public Keyboard {
 
     endwin();  // End curses mode
 #endif
-    auto it = keys_.find(ch);
+    std::clog << "Key Pressed: " << ch << "\n";
 
-    return it != keys_.end() ? it->second : Key::NoKey;
+    auto it = keys_.find(ch);
+    return it != keys_.end() ? it->second : InvalidKey::Unkown;
   }
 
  private:
-  static std::map<UserInput, Key> keys_;
+  static std::map<UserInput, Input> keys_;
 };
 
-std::map<ComputerKeyboard::UserInput, Key> ComputerKeyboard::keys_ = {
-    {'a', Key::C_lower}, {'w', Key::Cs}, {'s', Key::D},  {'e', Key::Ds},
-    {'d', Key::E},       {'f', Key::F},  {'t', Key::Fs}, {'g', Key::G},
-    {'y', Key::Gs},      {'h', Key::A},  {'u', Key::As}, {'j', Key::B},
-    {'k', Key::C_upper}};
+std::map<ComputerKeyboard::UserInput, Input> ComputerKeyboard::keys_ = {
+    {'a', PianoKey::C_lower},   {'w', PianoKey::Cs},
+    {'s', PianoKey::D},         {'e', PianoKey::Ds},
+    {'d', PianoKey::E},         {'f', PianoKey::F},
+    {'t', PianoKey::Fs},        {'g', PianoKey::G},
+    {'y', PianoKey::Gs},        {'h', PianoKey::A},
+    {'u', PianoKey::As},        {'j', PianoKey::B},
+    {'k', PianoKey::C_upper},   {',', ControlKey::OctaveDown},
+    {'.', ControlKey::OctaveUp}};
 
 #endif  // COMPUTERKEYBOARD_H

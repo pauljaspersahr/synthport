@@ -1,4 +1,5 @@
 #include "Sine.h"
+#include "Keyboard.h"
 #include "Note.h"
 
 bool Sine::open(PaDeviceIndex index) {
@@ -78,8 +79,9 @@ int Sine::paCallbackMethod(const void* inputBuffer, void* outputBuffer,
                            PaStreamCallbackFlags statusFlags) {
   float* out = (float*)outputBuffer;
   float sampleRate = 44100.0;  // Sample rate
-  float const frequency(noteFrequncy(Note::A3));
+  float const frequency(noteFrequency(currentNote_));
 
+  // std::cout << "freuquency = " << frequency << "\n";
   for (unsigned long i = 0; i < framesPerBuffer; i++) {
     float t = frameCount_ / sampleRate;
     *out++ = sin(2 * M_PI * frequency * t);  // left channel
@@ -90,6 +92,36 @@ int Sine::paCallbackMethod(const void* inputBuffer, void* outputBuffer,
   return paContinue;
 }
 
+void Sine::setCurrentNote(Note note) {
+  currentNote_ = note;
+}
+void Sine::applyInput(Input input) {
+  std::visit(InputVisitor{this}, input);
+}
+
 void Sine::paStreamFinishedMethod() {
   printf("Stream Completed: %s\n", message);
+}
+
+void InputVisitor::operator()(InvalidKey) {
+  return;
+}
+void InputVisitor::operator()(PianoKey key) {
+  sine_->currentNote_ =
+      static_cast<Note>(sine_->octave_ * 12 + static_cast<int>(key));
+}
+
+void InputVisitor::operator()(ControlKey key) {
+  switch (key) {
+    case ControlKey::OctaveDown: {
+      sine_->octave_ = sine_->octave_ > 0 ? sine_->octave_ - 1 : 0;
+      break;
+    }
+    case ControlKey::OctaveUp: {
+      sine_->octave_++;
+      break;
+    }
+    default:
+      break;
+  }
 }

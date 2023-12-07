@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS)
 
+# for keyboard input on mac
+find_package(Curses REQUIRED)
+
 include(FetchContent)
 include(ExternalProject)
 
@@ -43,10 +46,15 @@ find_library(AUDIO_UNIT_LIB AudioUnit)
 find_library(CORE_SERVICES_LIB CoreServices)
 find_library(CORE_FOUNDATION_LIB CoreFoundation)
 
+# Link ncurses to your target
 target_link_libraries(synthport PRIVATE
   ${CORE_AUDIO_LIB}
   ${AUDIO_TOOLBOX_LIB}
   ${AUDIO_UNIT_LIB}
   ${CORE_SERVICES_LIB}
   ${CORE_FOUNDATION_LIB}
+  ${CURSES_LIBRARIES}
 )
+
+# Include ncurses headers
+target_include_directories(synthport PRIVATE ${CURSES_INCLUDE_DIR})

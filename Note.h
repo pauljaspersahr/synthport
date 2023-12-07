@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-enum class Note {
+enum Note {
   C0,
   Cs0,
   D0,
@@ -104,14 +104,14 @@ enum class Note {
 };
 using Semitones = int;
 
-inline float noteFrequncy(Note note) {
+inline float noteFrequency(Note note) {
   float const A4 = 440.;
-  Semitones const pitch = static_cast<int>(Note::A4) - static_cast<int>(note);
-  return A4 * std::pow(2, -pitch / 12);
+  Semitones const pitch = note - Note::A4;
+  return A4 * std::pow(2, pitch / 12.0);
 }
 
-inline float noteFrequncy(Note baseNote, Semitones pitch) {
-  float const baseFreq = noteFrequncy(baseNote);
-  return baseFreq * std::pow(2, pitch / 12);
+inline float noteFrequency(Note baseNote, Semitones pitch) {
+  float const baseFreq = noteFrequency(baseNote);
+  return baseFreq * std::pow(2, pitch / 12.0);
 }
 #endif  // NOTE_H

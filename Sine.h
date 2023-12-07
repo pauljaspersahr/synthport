@@ -20,6 +20,15 @@
 
 #define TABLE_SIZE (200)
 
+class Sine;
+struct InputVisitor {
+  InputVisitor(Sine* sine) : sine_{sine} {}
+  void operator()(InvalidKey);
+  void operator()(PianoKey key);
+  void operator()(ControlKey key);
+  Sine* sine_;
+};
+
 class Sine {
  public:
   Sine() : stream_(0), left_phase(0), right_phase(0) {
@@ -39,7 +48,13 @@ class Sine {
 
   bool stop();
 
+  void setCurrentNote(Note note);
+
+  void applyInput(Input input);
+
  private:
+  friend class InputVisitor;
+
   /* The instance callback, where we have access to every method/variable in object of class Sine */
 
   int paCallbackMethod(const void* inputBuffer, void* outputBuffer,
@@ -75,6 +90,8 @@ class Sine {
   int right_phase;
   char message[20];
   size_t frameCount_{};
+  Note currentNote_{Note::C4};
+  uint octave_{3};
 };
 
 class ScopedPaHandler {

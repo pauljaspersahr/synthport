@@ -1,9 +1,12 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-enum class Key {
-  NoKey = -1,
-  C_lower = 0,
+#include <variant>
+
+enum class InvalidKey { Unkown };
+
+enum class PianoKey {
+  C_lower,
   Cs,
   D,
   Ds,
@@ -15,13 +18,16 @@ enum class Key {
   A,
   As,
   B,
-  C_upper
+  C_upper,
 };
+
+enum class ControlKey { OctaveUp, OctaveDown };
+using Input = std::variant<InvalidKey, PianoKey, ControlKey>;
 
 class Keyboard {
  public:
   virtual ~Keyboard() = default;
-  virtual Key getInput() const = 0;
+  virtual Input getInput() const = 0;
 };
 
 #endif  // KEYBOARD_H
