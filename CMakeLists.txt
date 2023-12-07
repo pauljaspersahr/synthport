@@ -32,8 +32,21 @@ if(NOT portaudio_POPULATED)
   )
 endif()
 
-add_executable(synthport main.cpp)
+add_executable(synthport main.cpp sine.cpp)
 
 target_include_directories(synthport PRIVATE ${PORTAUDIO_DIR}/include)
 target_link_libraries(synthport PRIVATE ${PORTAUDIO_DIR}/lib/.libs/libportaudio.a)
 
+find_library(CORE_AUDIO_LIB CoreAudio)
+find_library(AUDIO_TOOLBOX_LIB AudioToolbox)
+find_library(AUDIO_UNIT_LIB AudioUnit)
+find_library(CORE_SERVICES_LIB CoreServices)
+find_library(CORE_FOUNDATION_LIB CoreFoundation)
+
+target_link_libraries(synthport PRIVATE
+  ${CORE_AUDIO_LIB}
+  ${AUDIO_TOOLBOX_LIB}
+  ${AUDIO_UNIT_LIB}
+  ${CORE_SERVICES_LIB}
+  ${CORE_FOUNDATION_LIB}
+)
