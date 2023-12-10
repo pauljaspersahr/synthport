@@ -1,6 +1,6 @@
 
 # Define a test executable
-add_executable(synthport_tests test.cpp)
+add_executable(synthport_tests tests/test.cpp)
 
 # Link the GoogleTest libraries
 target_link_libraries(synthport_tests PRIVATE gtest_main)

@@ -11,7 +11,7 @@ set(LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 # for keyboard input on mac
 find_package(Curses REQUIRED)
 
-# core audio libs on mac
+# find core audio libs on mac
 find_library(CORE_AUDIO_LIB CoreAudio)
 find_library(AUDIO_TOOLBOX_LIB AudioToolbox)
 find_library(AUDIO_UNIT_LIB AudioUnit)
@@ -20,7 +20,6 @@ find_library(CORE_FOUNDATION_LIB CoreFoundation)
 
 # Include configurations for external projects
 include(${CMAKE_CURRENT_SOURCE_DIR}/PortAudioConfig.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/GoogleTestConfig.cmake)
 
 add_executable(synthport main.cpp sine.cpp PortAudioContext.cpp)
 
@@ -40,6 +39,6 @@ target_link_libraries(synthport PRIVATE
   ${CURSES_LIBRARIES}
 )
 
-
 # Include test configuration
+include(${CMAKE_CURRENT_SOURCE_DIR}/GoogleTestConfig.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/tests/SynthportTests.cmake)
