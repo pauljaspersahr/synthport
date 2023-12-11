@@ -1,7 +1,7 @@
 #ifndef SINEENGINE_H
 #define SINEENGINE_H
 
-#include "IAudioEngine.h"
+#include "model/IAudioEngine.h"
 #include "Note.h"
 
 class SineEngine : public IAudioEngine {

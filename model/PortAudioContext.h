@@ -1,8 +1,8 @@
 #ifndef PORTAUDIOCONTEXT_H
 #define PORTAUDIOCONTEXT_H
 
-#include "IAudioContext.h"
-#include "IAudioEngine.h"
+#include "model/IAudioContext.h"
+#include "model/IAudioEngine.h"
 
 #include "portaudio.h"
 

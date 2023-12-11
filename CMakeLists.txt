@@ -21,7 +21,11 @@ find_library(CORE_FOUNDATION_LIB CoreFoundation)
 # Include configurations for external projects
 include(${CMAKE_CURRENT_SOURCE_DIR}/PortAudioConfig.cmake)
 
-add_executable(synthport main.cpp sine.cpp PortAudioContext.cpp)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(synthport main.cpp sine.cpp )
+
+add_subdirectory(model)
 
 # Include headers
 target_include_directories(synthport PRIVATE 
@@ -30,6 +34,7 @@ target_include_directories(synthport PRIVATE
 
 # Link libraries 
 target_link_libraries(synthport PRIVATE
+  portmodel
   ${PORTAUDIO_DIR}/lib/.libs/libportaudio.a
   ${CORE_AUDIO_LIB}
   ${AUDIO_TOOLBOX_LIB}
