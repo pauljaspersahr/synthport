@@ -45,29 +45,44 @@
 #include "ComputerKeyboard.h"
 #include "Sine.h"
 
+#include "model/PortAudioContext.h"
+#include "model/SineEngine.h"
+
 #include "portaudio.h"
 
 int main() {
   Sine sine;
+  PortAudioContext context{std::make_unique<SineEngine>()};
 
   ScopedPaHandler paInit;
   if (paInit.result() != paNoError)
     goto error;
 
-  if (sine.open(Pa_GetDefaultOutputDevice())) {
-    if (sine.start()) {
-      ComputerKeyboard keyboard{};
-      while (true) {
-        auto key = keyboard.getInput();
-        if (std::holds_alternative<InvalidKey>(key))
-          break;
-        sine.applyInput(key);
+  if (context.open(Pa_GetDefaultOutputDevice())) {
+    if (context.start()) {
+      std::puts("Context\n");
+      Pa_Sleep(1000);
+      context.stop();
       }
-      sine.stop();
+      context.close();
     }
 
+  if (sine.open(Pa_GetDefaultOutputDevice())) {
+    if (sine.start()) {
+      std::puts("sine\n");
+      Pa_Sleep(1000);
+      // ComputerKeyboard keyboard{};
+      // while (true) {
+      //   auto key = keyboard.getInput();
+      //   if (std::holds_alternative<InvalidKey>(key))
+      //     break;
+      //   sine.applyInput(key);
+      //}
+      sine.stop();
+      }
     sine.close();
-  }
+    }
+
 
   printf("Test finished.\n");
   return paNoError;

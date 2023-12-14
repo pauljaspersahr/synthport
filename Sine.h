@@ -2,7 +2,7 @@
 #define SINE_H
 
 #include "Keyboard.h"
-#include "Note.h"
+#include "model/Note.h"
 
 #include "portaudio.h"
 
@@ -90,7 +90,7 @@ class Sine {
   int right_phase;
   char message[20];
   size_t frameCount_{};
-  Note currentNote_{Note::C4};
+  Note currentNote_{Note::A4};
   uint octave_{3};
 };
 

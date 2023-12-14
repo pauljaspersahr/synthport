@@ -19,8 +19,6 @@ class PortAudioContext : public IAudioContext {
   bool stop() override;
 
  private:
-  /* The instance callback, where we have access to every method/variable in object of class Sine */
-
   int paCallbackMethod(const void* inputBuffer, void* outputBuffer,
                        unsigned long framesPerBuffer,
                        const PaStreamCallbackTimeInfo* timeInfo,
@@ -51,7 +49,7 @@ class PortAudioContext : public IAudioContext {
 
  private:
   std::unique_ptr<IAudioEngine> audioEngine_{};
-  PaStream* stream_{};
+  PaStream* stream_{nullptr};
   unsigned long sampleRate_{44100};
   char message[20];
 };

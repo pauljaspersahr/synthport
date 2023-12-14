@@ -1,4 +1,4 @@
-#include "PortAudioContext.h"
+#include "model/PortAudioContext.h"
 
 bool PortAudioContext::open(PaDeviceIndex index) {
   PaStreamParameters outputParameters;
@@ -79,10 +79,7 @@ int PortAudioContext::paCallbackMethod(const void* inputBuffer,
                                        PaStreamCallbackFlags statusFlags) {
 
   float* out = static_cast<float*>(outputBuffer);
-  std::vector<float> buffer = audioEngine_->nextBuffer(framesPerBuffer);
-  for (unsigned long ii = 0; ii < framesPerBuffer; ++ii) {
-    out[ii] = buffer[ii];
-  }
+  audioEngine_->nextBuffer(out, framesPerBuffer);
   return paContinue;
 }
 

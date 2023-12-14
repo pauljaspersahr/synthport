@@ -1,6 +1,5 @@
 #include "Sine.h"
 #include "Keyboard.h"
-#include "Note.h"
 
 bool Sine::open(PaDeviceIndex index) {
   PaStreamParameters outputParameters;
@@ -82,10 +81,12 @@ int Sine::paCallbackMethod(const void* inputBuffer, void* outputBuffer,
   float const frequency(noteFrequency(currentNote_));
 
   // std::cout << "freuquency = " << frequency << "\n";
-  for (unsigned long i = 0; i < framesPerBuffer; i++) {
+  for (unsigned long i = 0; i < 2 * framesPerBuffer; i= i + 2){
     float t = frameCount_ / sampleRate;
-    *out++ = sin(2 * M_PI * frequency * t);  // left channel
-    *out++ = sin(2 * M_PI * frequency * t);  // right channel
+    out[i]= sin(2 * M_PI * frequency * t);  // left channel
+    // std::cout << "sine" << out[i] << "\n";
+    out[i+1]  = sin(2 * M_PI * frequency * t);  // right channel
+    // std::cout << "sine" << out[i+1] << "\n";
     frameCount_++;
   }
 
