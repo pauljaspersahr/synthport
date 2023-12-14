@@ -1,5 +1,4 @@
-#ifndef KEYBOARD_H
-#define KEYBOARD_H
+#pragma once
 
 #include <variant>
 
@@ -29,5 +28,3 @@ class Keyboard {
   virtual ~Keyboard() = default;
   virtual Input getInput() const = 0;
 };
-
-#endif  // KEYBOARD_H

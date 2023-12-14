@@ -79,7 +79,9 @@ int PortAudioContext::paCallbackMethod(const void* inputBuffer,
                                        PaStreamCallbackFlags statusFlags) {
 
   float* out = static_cast<float*>(outputBuffer);
-  audioEngine_->nextBuffer(out, framesPerBuffer);
+  // audioEngine_->nextBuffer(out, framesPerBuffer);
+  processor_.callback(std::span<float>{out, 2 * framesPerBuffer});
+
   return paContinue;
 }
 

@@ -1,28 +1,26 @@
-#ifndef SINEENGINE_H
-#define SINEENGINE_H
+#pragma once
 
+#include "model/EmptyEngine.h"
 #include "model/IAudioEngine.h"
+#include "model/MultiBuffer.h"
 #include "model/Note.h"
+
+#include <memory>
 
 class SineEngine : public IAudioEngine {
 
  public:
-  void nextBuffer(float* out, unsigned long framesPerBuffer) override {
-    unsigned long const stereoFrames = 2 * framesPerBuffer;
-    float const frequency(noteFrequency(Note::A4));
-    float sampleRate = 44100.0;
+  SineEngine(std::unique_ptr<IAudioEngine>&& engine)
+      : upstream_{std::move(engine)} {}
 
-    for (unsigned long ii = 0; ii < stereoFrames; ii = ii + 2) {
-      float t = frameCount_ / sampleRate;
-      out[ii] = sin(2 * M_PI * frequency * t);
-      out[ii + 1] = sin(2 * M_PI * frequency * t);
-      frameCount_++;
-    }
-  }
+  SineEngine() : upstream_{std::make_unique<EmptyEngine>()} {}
+
+  void nextBuffer(float* out, unsigned long framesPerBuffer) override;
+
+  void process(std::span<float> buffer) override;
 
  private:
+  std::unique_ptr<IAudioEngine> upstream_;
   float sampleRate_{44100.0};
   size_t frameCount_{};
 };
-
-#endif  // SINEENGINE_H

@@ -1,5 +1,4 @@
-#ifndef COMPUTERKEYBOARD_H
-#define COMPUTERKEYBOARD_H
+#pragma once
 
 #include "Keyboard.h"
 
@@ -56,5 +55,3 @@ std::map<ComputerKeyboard::UserInput, Input> ComputerKeyboard::keys_ = {
     {'u', PianoKey::As},        {'j', PianoKey::B},
     {'k', PianoKey::C_upper},   {',', ControlKey::OctaveDown},
     {'.', ControlKey::OctaveUp}};
-
-#endif  // COMPUTERKEYBOARD_H

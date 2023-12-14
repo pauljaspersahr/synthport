@@ -1,5 +1,4 @@
-#ifndef IAUDIOCONTEXT_H
-#define IAUDIOCONTEXT_H
+#pragma once
 
 class IAudioContext {
  public:
@@ -9,5 +8,3 @@ class IAudioContext {
   virtual bool start() = 0;
   virtual bool stop() = 0;
 };
-
-#endif  // IAUDIOCONTEXT_H

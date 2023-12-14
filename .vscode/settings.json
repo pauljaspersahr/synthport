@@ -2,6 +2,10 @@
     "files.associations": {
         "iostream": "cpp",
         "string": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "memory": "cpp",
+        "span": "cpp",
+        "fstream": "cpp",
+        "locale": "cpp"
     }
 }

@@ -1,4 +1,4 @@
-add_library(portmodel PortAudioContext.cpp)
+add_library(portmodel PortAudioContext.cpp SineEngine.cpp)
 
 target_include_directories(portmodel PRIVATE 
   ${PORTAUDIO_DIR}/include

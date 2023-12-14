@@ -45,33 +45,50 @@
 #include "ComputerKeyboard.h"
 #include "Sine.h"
 
+#include "model/AudioProcessor.h"
+#include "model/EmptyEngine.h"
 #include "model/PortAudioContext.h"
 #include "model/SineEngine.h"
+
+#include "model/MultiBuffer.h"
 
 #include "portaudio.h"
 
 int main() {
   Sine sine;
-  PortAudioContext context{std::make_unique<SineEngine>()};
+  auto sineEngine = std::make_unique<SineEngine>();
+
+  auto buffer = std::make_unique<MultiBuffer<64, 2>>();
+
+  AudioProcessor processor{std::move(buffer), std::move(sineEngine)};
+  PortAudioContext context{std::move(processor)};
+
+  ComputerKeyboard keyboard{};
 
   ScopedPaHandler paInit;
   if (paInit.result() != paNoError)
     goto error;
 
   if (context.open(Pa_GetDefaultOutputDevice())) {
+
     if (context.start()) {
       std::puts("Context\n");
       Pa_Sleep(1000);
-      context.stop();
+      while (true) {
+        auto key = keyboard.getInput();
+        if (std::holds_alternative<InvalidKey>(key))
+          break;
+        sine.applyInput(key);
       }
-      context.close();
+      context.stop();
     }
+    context.close();
+  }
 
   if (sine.open(Pa_GetDefaultOutputDevice())) {
     if (sine.start()) {
       std::puts("sine\n");
       Pa_Sleep(1000);
-      // ComputerKeyboard keyboard{};
       // while (true) {
       //   auto key = keyboard.getInput();
       //   if (std::holds_alternative<InvalidKey>(key))
@@ -79,10 +96,9 @@ int main() {
       //   sine.applyInput(key);
       //}
       sine.stop();
-      }
-    sine.close();
     }
-
+    sine.close();
+  }
 
   printf("Test finished.\n");
   return paNoError;

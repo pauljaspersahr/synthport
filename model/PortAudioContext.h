@@ -1,6 +1,6 @@
-#ifndef PORTAUDIOCONTEXT_H
-#define PORTAUDIOCONTEXT_H
+#pragma once
 
+#include "model/AudioProcessor.h"
 #include "model/IAudioContext.h"
 #include "model/IAudioEngine.h"
 
@@ -10,8 +10,8 @@
 
 class PortAudioContext : public IAudioContext {
  public:
-  PortAudioContext(std::unique_ptr<IAudioEngine> audioEngine)
-      : audioEngine_{std::move(audioEngine)} {}
+  PortAudioContext(AudioProcessor&& processor)
+      : processor_{std::move(processor)} {}
 
   bool open(int deviceIndex) override;
   bool close() override;
@@ -48,10 +48,8 @@ class PortAudioContext : public IAudioContext {
   }
 
  private:
-  std::unique_ptr<IAudioEngine> audioEngine_{};
+  AudioProcessor processor_;
   PaStream* stream_{nullptr};
   unsigned long sampleRate_{44100};
   char message[20];
 };
-
-#endif  // PORTAUDIOCONTEXT_H

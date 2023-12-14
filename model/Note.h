@@ -1,5 +1,4 @@
-#ifndef NOTE_H
-#define NOTE_H
+#pragma once
 
 #include <cmath>
 
@@ -114,4 +113,3 @@ inline float noteFrequency(Note baseNote, Semitones pitch) {
   float const baseFreq = noteFrequency(baseNote);
   return baseFreq * std::pow(2, pitch / 12.0);
 }
-#endif  // NOTE_H
